@@ -9,8 +9,14 @@ app.use(express.json())
 // Cadena de conexión usando el driver oficial
 
 // configuración estándar de IBM i para ODBC.
-const connectionString =
-  'Driver={IBM i Access ODBC Driver};System=pub400.com;Uid=codecraft;Pwd=msantos02;DBQ=pub400;SSL=0;'
+// const connectionString =
+//   'Driver={IBM i Access ODBC Driver};System=pub400.com;Uid=codecraft;Pwd=msantos02;DBQ=pub400;SSL=0;'
+
+// Simular la connction
+app.post('/clientes/validar', async (req, res) => {
+  // Simulamos que el IBM i respondió éxito
+  res.json({ codigoRespuesta: '00' })
+})
 
 async function ejecutarSP(datos) {
   let connection
