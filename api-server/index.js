@@ -13,6 +13,13 @@ if (!connectionString) {
   throw new Error('Error: ODBC_CONN no esta definida en .env')
 }
 
+// Simular la connction
+
+app.post('/clientes/validar', async (req, res) => {
+  // Simulamos que el IBM i respondió éxito
+  res.json({ codigoRespuesta: '00' })
+})
+
 async function ejecutarSP(datos) {
   let connection
   try {

@@ -15,8 +15,29 @@ const initialFormData: ClientFormt = {
 export default function Dashboard() {
   const [loading, setLoading] = useState(false)
   const [resultado, setResultado] = useState<string | null>(null)
+  const [errores, setErrores] = useState<{ rucCli?: string; telCli?: string }>({})
 
   const [formData, setFormData] = useState<ClientFormt>(initialFormData)
+
+  const validarDigitos = (value: string, campo: 'rucCli' | 'telCli') => {
+    if (campo === 'rucCli' && value.length != 11) {
+      setErrores((prev) => ({
+        ...prev,
+        rucCli: 'No cumple con los requisitos, valor esperado 11 dígitos!',
+      }))
+    } else if (campo === 'telCli' && value.length != 10) {
+      setErrores((prev) => ({
+        ...prev,
+        telCli: 'No cumple con los requisitos, valor esperado 10 dígitos!',
+      }))
+    } else {
+      setErrores((prev) => {
+        const copy = { ...prev }
+        delete copy[campo]
+        return copy
+      })
+    }
+  }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -25,10 +46,16 @@ export default function Dashboard() {
       ...formData,
       [name]: value,
     }))
+
+    if (name === 'rucCli' || name === 'telCli') {
+      validarDigitos(value, name)
+    }
   }
 
   const handleSubmit = async (e: ChangeEvent) => {
     e.preventDefault()
+
+    if (errores.rucCli || errores.telCli) return
 
     setLoading(true)
     setResultado(null)
@@ -39,6 +66,7 @@ export default function Dashboard() {
       if (codigo === '00') {
         setResultado('Éxito: Cliente actualizado')
         setFormData(initialFormData)
+        setErrores({})
       } else {
         setResultado(`Error: Código ${codigo}`)
       }
@@ -54,11 +82,12 @@ export default function Dashboard() {
   const clearForm = () => {
     setFormData(initialFormData)
     setResultado(null)
+    setErrores({})
   }
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
-      <h2 className="text-xl font-bold mb-4 text-center">Validar Cliente! </h2>
+      <h2 className="text-xl font-bold mb-4 text-center">Validar Datos </h2>
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
@@ -99,17 +128,19 @@ export default function Dashboard() {
           value={formData.rucCli}
           onChange={handleChange}
           required
-          className="w-full border p-2"
+          className={`w-full border p-2 ${errores.rucCli ? 'border-red-500' : ''}`}
           placeholder="Cédula/RUC"
         />
+        {errores.rucCli && <p className="text-red-500 text-sm">{errores.rucCli}</p>}
         <input
           name="telCli"
           value={formData.telCli}
           onChange={handleChange}
           required
-          className="w-full border p-2"
+          className={`w-full border p-2 ${errores.telCli ? 'border-red-500' : ''}`}
           placeholder="Teléfono"
         />
+        {errores.telCli && <p className="text-red-500 text-sm">{errores.telCli}</p>}
         <div className="flex justify-between gap-30">
           <button
             type="submit"
