@@ -42,8 +42,10 @@ export default function Dashboard() {
       } else {
         setResultado(`Error: Código ${codigo}`)
       }
-    } catch {
-      alert(setResultado('Error de conexión con pub/400'))
+    } catch (err) {
+      setResultado('Error de conexión con pub/400')
+      alert('Error de conexión con pub/400')
+      console.error(err)
     } finally {
       setLoading(false)
     }
