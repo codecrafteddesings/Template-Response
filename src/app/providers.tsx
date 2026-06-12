@@ -1,13 +1,5 @@
-import { ReactNode, useEffect } from "react"
-import { useAuthStore } from "@features/auth/store"
+import type { ReactNode } from "react";
 
 export default function Providers({ children }: { children: ReactNode }) {
-    const setUser = useAuthStore((s) => s.setUser)
-
-    useEffect(() => {
-        const saved = localStorage.getItem("user")
-        if (saved) setUser(JSON.parse(saved))
-    }, [])
-
-    return <>{children}</>
+  return <>{children}</>;
 }

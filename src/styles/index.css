@@ -1,2 +1,46 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+:root {
+  color-scheme: light dark;
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html.dark {
+  color-scheme: dark;
+  background-color: #000000;
+  color: #f8fafc;
+}
+
+html.dark body {
+  background-color: #000000;
+  color: #f8fafc;
+}
+
+html.dark [class*='bg-'] {
+  background-color: #000000 !important;
+}
+
+html.dark [class*='border-'] {
+  border-color: #111111 !important;
+}
+
+html.dark [class*='text-gray'],
+html.dark [class*='text-slate'],
+html.dark [class*='text-blue'],
+html.dark [class*='text-green'],
+html.dark [class*='text-red'],
+html.dark [class*='text-yellow'],
+html.dark [class*='text-indigo'],
+html.dark [class*='text-purple'],
+html.dark [class*='text-pink'],
+html.dark [class*='text-cyan'],
+html.dark [class*='text-emerald'],
+html.dark [class*='text-amber'],
+html.dark [class*='text-rose'] {
+  color: #f8fafc !important;
+}
+
+html.dark .text-black {
+  color: #f8fafc !important;
+}

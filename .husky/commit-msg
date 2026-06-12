@@ -1,0 +1,24 @@
+# Regex para conventional commits
+commit_msg_regex="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,}"
+
+if ! grep -qE "$commit_msg_regex" "$1"; then
+  echo "❌ Formato de commit inválido."
+  echo ""
+  echo "Formato esperado: <tipo>(<alcance>): <descripción>"
+  echo ""
+  echo "Tipos válidos:"
+  echo "  feat:     Nueva funcionalidad"
+  echo "  fix:      Corrección de bug"
+  echo "  docs:     Documentación"
+  echo "  style:    Estilos (no afecta lógica)"
+  echo "  refactor: Refactorización"
+  echo "  perf:     Mejora de rendimiento"
+  echo "  test:     Tests"
+  echo "  build:    Build system"
+  echo "  ci:       CI/CD"
+  echo "  chore:    Mantenimiento"
+  echo "  revert:   Revertir cambio"
+  echo ""
+  echo "Ejemplo: feat(auth): agregar login con Google"
+  exit 1
+fi
