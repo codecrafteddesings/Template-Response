@@ -21,6 +21,16 @@ html.dark [class*='bg-'] {
   background-color: #000000 !important;
 }
 
+html.dark button[data-white-btn] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #d1d5db !important;
+}
+
+html.dark button[data-white-btn]:hover {
+  background-color: #f3f4f6 !important;
+}
+
 html.dark [class*='border-'] {
   border-color: #111111 !important;
 }

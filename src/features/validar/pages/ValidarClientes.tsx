@@ -39,24 +39,19 @@ export default function ValidarClientes() {
       ...prev,
       [name]: value,
     }));
-
-    if (name === "rucCli" || name === "telCli") {
-      const error = validarDigitos(value, name);
-      setErrores((prev) => {
-        if (error) {
-          return { ...prev, [name]: error };
-        }
-        const copy = { ...prev };
-        delete copy[name];
-        return copy;
-      });
-    }
   };
 
   const handleSubmit = async (e: ChangeEvent) => {
     e.preventDefault();
 
-    if (errores.rucCli || errores.telCli) return;
+    const errorRuc = validarDigitos(formData.rucCli, "rucCli");
+    const errorTel = validarDigitos(formData.telCli, "telCli");
+    const nuevosErrores: { rucCli?: string; telCli?: string } = {};
+    if (errorRuc) nuevosErrores.rucCli = errorRuc;
+    if (errorTel) nuevosErrores.telCli = errorTel;
+    setErrores(nuevosErrores);
+
+    if (nuevosErrores.rucCli || nuevosErrores.telCli) return;
 
     setLoading(true);
     setResultado(null);
@@ -212,8 +207,9 @@ export default function ValidarClientes() {
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
             <button
               type="submit"
+              data-white-btn
               disabled={loading}
-              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white dark:bg-white dark:text-gray-900 dark:border dark:border-gray-300 dark:hover:bg-gray-100 px-6 py-2.5 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
             >
               {loading && (
                 <svg
@@ -241,8 +237,9 @@ export default function ValidarClientes() {
             </button>
             <button
               type="button"
+              data-white-btn
               onClick={clearForm}
-              className="flex-1 sm:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2.5 rounded-lg font-medium transition"
+              className="flex-1 sm:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-white dark:text-gray-900 dark:border dark:border-gray-300 dark:hover:bg-gray-100 px-6 py-2.5 rounded-lg font-medium transition"
             >
               Limpiar
             </button>

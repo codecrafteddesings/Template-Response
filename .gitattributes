@@ -1,0 +1,11 @@
+# Normaliza los finales de línea en el repositorio
+* text=auto
+
+# Forzar LF en archivos de código fuente para evitar cambios automáticos en Windows
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.md text eol=lf
