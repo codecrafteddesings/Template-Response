@@ -173,7 +173,7 @@ export default function ValidarClientes() {
                     ? "border-red-500 bg-red-50"
                     : "border-gray-300"
                 }`}
-                placeholder="12345678901"
+                placeholder="402-4567890-1"
               />
               {errores.rucCli && (
                 <p className="text-red-500 text-xs mt-1">{errores.rucCli}</p>
@@ -195,7 +195,7 @@ export default function ValidarClientes() {
                     ? "border-red-500 bg-red-50"
                     : "border-gray-300"
                 }`}
-                placeholder="0991234567"
+                placeholder="829-772-9654"
               />
               {errores.telCli && (
                 <p className="text-red-500 text-xs mt-1">{errores.telCli}</p>
