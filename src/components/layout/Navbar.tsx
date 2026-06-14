@@ -14,7 +14,7 @@ export default function Navbar() {
   }, [dark]);
 
   return (
-    <header className="h-14 bg-white dark:bg-gray-800 shadow px-4 flex items-center justify-end border-b dark:border-gray-700">
+    <header className="h-14 bg-white dark:bg-black shadow px-4 flex items-center justify-end border-b dark:border-slate-800">
       <button
         onClick={toggleTheme}
         className="hover:scale-110 transition-transform dark:text-gray-100 text-gray-600"

@@ -86,20 +86,20 @@ export default function ValidarClientes() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Validar Clientes</h1>
-        <p className="text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Validar Clientes</h1>
+        <p className="text-gray-500 dark:text-slate-400">
           Complete los datos del cliente para validación
         </p>
       </div>
 
       {/* Form Card */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+      <div className="bg-white dark:bg-black rounded-lg shadow-sm border border-gray-100 dark:border-slate-800 p-6">
         <form onSubmit={handleSubmit}>
           {/* Grid responsive */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Nombre */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
                 Nombre
               </label>
               <input
@@ -107,14 +107,14 @@ export default function ValidarClientes() {
                 value={formData.nomCli}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
                 placeholder="Ingrese nombre"
               />
             </div>
 
             {/* Primer Apellido */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
                 Primer Apellido
               </label>
               <input
@@ -122,14 +122,14 @@ export default function ValidarClientes() {
                 value={formData.patCli}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
                 placeholder="Ingrese apellido"
               />
             </div>
 
             {/* Segundo Apellido */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
                 Segundo Apellido
               </label>
               <input
@@ -137,14 +137,14 @@ export default function ValidarClientes() {
                 value={formData.matCli}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
                 placeholder="Ingrese apellido"
               />
             </div>
 
             {/* Correo */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
                 Correo Electrónico
               </label>
               <input
@@ -153,14 +153,14 @@ export default function ValidarClientes() {
                 value={formData.corrCli}
                 onChange={handleChange}
                 required
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
                 placeholder="correo@ejemplo.com"
               />
             </div>
 
             {/* Cédula/RUC */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
                 Cédula / RUC
               </label>
               <input
@@ -168,21 +168,21 @@ export default function ValidarClientes() {
                 value={formData.rucCli}
                 onChange={handleChange}
                 required
-                className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 ${
                   errores.rucCli
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
+                    ? "border-red-500 bg-red-50 dark:bg-red-950 dark:border-red-400"
+                    : "border-gray-300 dark:border-slate-700"
                 }`}
                 placeholder="402-4567890-1"
               />
               {errores.rucCli && (
-                <p className="text-red-500 text-xs mt-1">{errores.rucCli}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errores.rucCli}</p>
               )}
             </div>
 
             {/* Teléfono */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
                 Teléfono
               </label>
               <input
@@ -190,15 +190,15 @@ export default function ValidarClientes() {
                 value={formData.telCli}
                 onChange={handleChange}
                 required
-                className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 ${
                   errores.telCli
-                    ? "border-red-500 bg-red-50"
-                    : "border-gray-300"
+                    ? "border-red-500 bg-red-50 dark:bg-red-950 dark:border-red-400"
+                    : "border-gray-300 dark:border-slate-700"
                 }`}
                 placeholder="829-772-9654"
               />
               {errores.telCli && (
-                <p className="text-red-500 text-xs mt-1">{errores.telCli}</p>
+                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errores.telCli}</p>
               )}
             </div>
           </div>
@@ -251,8 +251,8 @@ export default function ValidarClientes() {
           <div
             className={`mt-4 p-4 rounded-lg flex items-center gap-3 ${
               resultado.tipo === "exito"
-                ? "bg-green-50 text-green-800 border border-green-200"
-                : "bg-red-50 text-red-800 border border-red-200"
+                ? "bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800"
+                : "bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800"
             }`}
           >
             <span className="text-lg">
@@ -261,7 +261,7 @@ export default function ValidarClientes() {
             <span className="flex-1 font-medium">{resultado.mensaje}</span>
             <button
               onClick={() => setResultado(null)}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"
             >
               ✕
             </button>

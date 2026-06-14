@@ -64,17 +64,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-100 dark:bg-black">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-80"
+        className="bg-white dark:bg-black p-8 rounded shadow-md w-80 border dark:border-slate-800"
       >
-        <h1 className="text-2xl font-bold mb-6 text-center">
+        <h1 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
           {mode === "login" ? "Iniciar sesión" : "Crear cuenta"}
         </h1>
 
         {error && (
-          <p className="bg-red-100 text-red-600 p-2 mb-4 rounded text-sm">
+          <p className="bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-300 p-2 mb-4 rounded text-sm">
             {error}
           </p>
         )}
@@ -83,7 +83,7 @@ export default function LoginPage() {
           <input
             type="text"
             placeholder="Nombre completo"
-            className="w-full border p-2 mb-4 rounded"
+            className="w-full border dark:border-slate-700 p-2 mb-4 rounded bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -93,7 +93,7 @@ export default function LoginPage() {
         <input
           type="email"
           placeholder="Correo"
-          className="w-full border p-2 mb-4 rounded"
+          className="w-full border dark:border-slate-700 p-2 mb-4 rounded bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -103,7 +103,7 @@ export default function LoginPage() {
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
-            className="w-full border p-2 pr-10 rounded"
+            className="w-full border dark:border-slate-700 p-2 pr-10 rounded bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -111,7 +111,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-200"
           >
             {showPassword ? (
               <svg
@@ -157,7 +157,7 @@ export default function LoginPage() {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Confirmar contraseña"
-              className="w-full border p-2 pr-10 rounded"
+              className="w-full border dark:border-slate-700 p-2 pr-10 rounded bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -170,7 +170,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded disabled:opacity-50 flex items-center justify-center gap-2 transition"
         >
           {loading && (
             <svg
@@ -203,12 +203,12 @@ export default function LoginPage() {
               : "Crear cuenta"}
         </button>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm text-gray-600 dark:text-slate-400">
           {mode === "login" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
           <button
             type="button"
             onClick={toggleMode}
-            className="text-blue-600 hover:underline font-medium"
+            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
           >
             {mode === "login" ? "Regístrate" : "Inicia sesión"}
           </button>
