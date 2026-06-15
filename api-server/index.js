@@ -3,7 +3,8 @@ import 'dotenv/config'
 import express from 'express'
 import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
-import odbc from 'odbc'
+import mapepire from '@ibm/mapepire-js'
+const { Pool } = mapepire
 import pino from 'pino'
 import { z } from 'zod'
 
@@ -23,15 +24,25 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string().default('http://localhost:5173'),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().default(15 * 60 * 1000),
   RATE_LIMIT_MAX: z.coerce.number().default(100),
+  DB2_HOST: z.string().min(1, 'DB2_HOST es requerido'),
+  DB2_USER: z.string().min(1, 'DB2_USER es requerido'),
+  DB2_PASS: z.string().min(1, 'DB2_PASS es requerido'),
 })
 
 const env = envSchema.parse(process.env)
 
-const connectionString = process.env.ODBC_CONN
-
-if (!connectionString) {
-  throw new Error('ODBC_CONN no está definida en .env')
-}
+const pool = new Pool({
+  creds: {
+    host: env.DB2_HOST,
+    user: env.DB2_USER,
+    password: env.DB2_PASS,
+    rejectUnauthorized: false,
+  },
+  maxSize: 5,
+  startingSize: 2,
+})
+await pool.init()
+logger.info('Pool Mapepire conectado al IBM i')
 
 // ─── Zod Schemas ──────────────────────────────────────────────────
 const clienteSchema = z.object({
@@ -55,40 +66,32 @@ const registerSchema = z.object({
   password: z.string().min(6, 'Mínimo 6 caracteres'),
 })
 
-// ─── ODBC / Stored Procedure ───────────────────────────────────────
+// ─── Mapepire / Stored Procedure ────────────────────────────────────
 async function ejecutarSP(datos) {
-  let connection
   try {
-    logger.info('--- Iniciando intento de conexión al IBM i ---')
-
-    connection = await odbc.connect(connectionString)
-    logger.info('¡Conectado exitosamente al AS/400!')
-
-    const query = `CALL "CODECRAFT1"."SP_VALIDTC"(?, ?, ?, ?, ?, ?, ?, ?)`
-
     logger.info({ datos }, 'Enviando datos al procedimiento')
 
-    const result = await connection.query(query, [
-      datos.nomCli,
-      datos.patCli,
-      datos.matCli,
-      datos.corrCli,
-      datos.rucCli,
-      datos.telCli,
-      datos.codVal,
-      '',
-    ])
+    const result = await pool.execute(
+      `CALL "CODECRAFT1"."SP_VALIDTC"(?, ?, ?, ?, ?, ?, ?, ?)`,
+      {
+        parameters: [
+          datos.nomCli,
+          datos.patCli,
+          datos.matCli,
+          datos.corrCli,
+          datos.rucCli,
+          datos.telCli,
+          datos.codVal,
+          '',
+        ],
+      }
+    )
 
     logger.info('SP ejecutado correctamente')
     return result
   } catch (error) {
     logger.error({ err: error }, 'ERROR CRÍTICO EN EJECUCIÓN DEL SP')
     throw error
-  } finally {
-    if (connection) {
-      await connection.close()
-      logger.info('Conexión cerrada.')
-    }
   }
 }
 
@@ -165,26 +168,23 @@ app.post('/api/clientes/validar', async (req, res) => {
 
 // ─── Dashboard ────────────────────────────────────────────────────
 app.get('/api/dashboard', async (_req, res) => {
-  let connection
   try {
-    connection = await odbc.connect(connectionString)
+    const totalResult = await pool.execute("SELECT COUNT(*) AS TOTAL FROM CODECRAFT1.TABCLI03")
+    const statusResult = await pool.execute("SELECT STATU_PROD, COUNT(*) AS C FROM CODECRAFT1.TABCLI03 GROUP BY STATU_PROD")
+    const recentResult = await pool.execute("SELECT CODCLI, NOMCLI, PATCLI, MATCLI, STATU_PROD, FECMO_PROD FROM CODECRAFT1.TABCLI03 ORDER BY FECMO_PROD DESC FETCH FIRST 5 ROWS ONLY")
+    const monthResult = await pool.execute("SELECT SUBSTRING(CHAR(FECDI_PROD), 5, 2) AS MES, COUNT(*) AS C FROM CODECRAFT1.TABCLI03 GROUP BY SUBSTRING(CHAR(FECDI_PROD), 5, 2) ORDER BY MES")
 
-    const totalResult = await connection.query("SELECT COUNT(*) AS TOTAL FROM CODECRAFT1.TABCLI03")
-    const statusResult = await connection.query("SELECT STATU_PROD, COUNT(*) AS C FROM CODECRAFT1.TABCLI03 GROUP BY STATU_PROD")
-    const recentResult = await connection.query("SELECT CODCLI, NOMCLI, PATCLI, MATCLI, STATU_PROD, FECMO_PROD FROM CODECRAFT1.TABCLI03 ORDER BY FECMO_PROD DESC FETCH FIRST 5 ROWS ONLY")
-    const monthResult = await connection.query("SELECT SUBSTRING(CHAR(FECDI_PROD), 5, 2) AS MES, COUNT(*) AS C FROM CODECRAFT1.TABCLI03 GROUP BY SUBSTRING(CHAR(FECDI_PROD), 5, 2) ORDER BY MES")
-
-    const total = totalResult[0]?.TOTAL || 0
+    const total = totalResult.data[0]?.TOTAL || 0
     const statusMap = { A: 0, I: 0 }
-    if (statusResult) statusResult.forEach(r => { statusMap[r.STATU_PROD] = r.C })
+    if (statusResult.data) statusResult.data.forEach(r => { statusMap[r.STATU_PROD] = r.C })
 
     const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-    const chartData = (monthResult || []).map(r => ({
+    const chartData = (monthResult.data || []).map(r => ({
       month: meses[parseInt(r.MES, 10) - 1] || r.MES,
       value: r.C,
     }))
 
-    const activity = (recentResult || []).map(r => ({
+    const activity = (recentResult.data || []).map(r => ({
       id: r.CODCLI,
       client: (r.NOMCLI?.trim() || '') + ' ' + (r.PATCLI?.trim() || ''),
       action: 'Validación',
@@ -205,8 +205,6 @@ app.get('/api/dashboard', async (_req, res) => {
   } catch (error) {
     logger.error({ err: error }, 'Error al obtener datos del dashboard')
     res.status(500).json({ error: 'Error al obtener datos del dashboard' })
-  } finally {
-    if (connection) await connection.close()
   }
 })
 
@@ -303,5 +301,5 @@ app.listen(env.PORT, () => {
   logger.info(`Servidor puente corriendo en http://localhost:${env.PORT}`)
   logger.info(`Entorno: ${env.NODE_ENV}`)
   logger.info(`CORS permitido: ${env.CORS_ORIGIN}`)
-  logger.info('Modo: ODBC real (conectando a IBM i via SP)')
+  logger.info('Modo: Mapepire (conectando a IBM i via pool)')
 })

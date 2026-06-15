@@ -14,7 +14,7 @@
 
 ## Structure
 
-- Two independent packages in one repo: root (React/Vite) + `api-server/` (Express/ODBC)
+- Two independent packages in one repo: root (React/Vite) + `api-server/` (Express/Mapepire)
 - Feature-first: `src/features/{name}/` with pages/, components/, services.ts, types.ts, store.ts
 - Global components in `src/components/ui/`, layout in `src/components/layout/`
 - Global state: `src/store/` (themeStore, uiStore) + `features/auth/store.ts` (persisted with zustand/middleware)
@@ -38,7 +38,7 @@
 # root .env: VITE_API_URL=http://localhost:3001/api
 cp .env.example .env
 
-# api-server .env: ODBC_CONN, PORT, etc.
+# api-server .env: DB2_HOST, DB2_USER, DB2_PASS, PORT, etc.
 cp api-server/.env.example api-server/.env
 
 npm install
@@ -54,7 +54,7 @@ cd api-server && npm install
 
 ## API Server notes
 
-- Express + ODBC connecting to IBM i via stored procedure `SP_VALIDTC`
+- Express + Mapepire connecting to IBM i via stored procedure `SP_VALIDTC`
 - Users stored in-memory array (lost on restart)
 - Rate limit: 100 requests per 15 min on `/api/`
 - Dashboard queries AS400 table `TABCLI03` directly
@@ -82,7 +82,7 @@ Use this agent when the user mentions or implies any of:
 - Dependency vulnerabilities (`npm audit`)
 - OWASP, security best practices
 - Rate limiting, input validation, access control
-- Stored procedure security, ODBC connection security
+- Stored procedure security, Mapepire connection security
 
 **When to delegate:**
 

@@ -31,7 +31,7 @@
 - Validación de datos de clientes contra un sistema IBM i (AS/400) mediante un stored procedure (`SP_VALIDTC`)
 - Visualización de dashboard con estadísticas y actividad reciente desde la tabla `TABCLI03`
 
-Está diseñada como un template React + TypeScript con una arquitectura modular por features y un backend puente (Express) que conecta con IBM i vía ODBC.
+Está diseñada como un template React + TypeScript con una arquitectura modular por features y un backend puente (Express) que conecta con IBM i vía Mapepire.
 
 ---
 
@@ -40,7 +40,7 @@ Está diseñada como un template React + TypeScript con una arquitectura modular
 ```
 ┌──────────────────────┐        ┌─────────────────────────┐       ┌────────────────┐
 │   React SPA (Vite)   │ ────→ │   API Server (Express)   │ ───→ │  IBM i (AS/400)│
-│   Frontend :5173     │  HTTP │   :3001                  │ ODBC  │  Stored Proc.  │
+│   Frontend :5173     │  HTTP │   :3001                  │ Mapepire │  Stored Proc.│
 │                      │       │   helmet, cors, ratelimit│       │  TABCLI03      │
 └──────────────────────┘       └─────────────────────────┘       └────────────────┘
 ```
@@ -54,7 +54,7 @@ Está diseñada como un template React + TypeScript con una arquitectura modular
 
 ### Backend (API Server)
 
-- Express.js con ODBC para conexión a IBM i
+- Express.js con Mapepire para conexión a IBM i
 - Validación de datos con Zod
 - Rate limiting y seguridad básica (helmet, cors)
 - Usuarios en memoria (sin persistencia en disco)
@@ -80,7 +80,7 @@ Está diseñada como un template React + TypeScript con una arquitectura modular
 | Tecnología         | Versión | Propósito              |
 | ------------------ | ------- | ---------------------- |
 | Express            | 4.19.2  | Servidor HTTP          |
-| ODBC               | 2.5.0   | Conexión a IBM i       |
+| @ibm/mapepire-js   | 0.6.1   | Conexión a IBM i       |
 | Zod                | 3.23.8  | Validación de esquemas |
 | Helmet             | 7.1.0   | Seguridad HTTP headers |
 | express-rate-limit | 7.4.0   | Rate limiting          |
@@ -277,7 +277,7 @@ Template-Response/
 ### 9.1 Requisitos
 
 - Node.js ≥ 18
-- IBM i Access ODBC Driver (para conexión con AS/400)
+- Mapepire Server (daemon para conexión con IBM i)
 - npm
 
 ### 9.2 Variables de Entorno
@@ -291,7 +291,9 @@ VITE_API_URL=http://localhost:3001
 **Backend (`api-server/.env`)**
 
 ```
-ODBC_CONN=Driver={IBM i Access ODBC Driver};System=pub400.com;Uid=usuario;Pwd=password;DBQ=pub400;SSL=0;
+DB2_HOST=pub400.com
+DB2_USER=usuario
+DB2_PASS=password
 PORT=3001
 NODE_ENV=development
 CORS_ORIGIN=http://localhost:5173
@@ -374,17 +376,19 @@ A continuación se listan las vulnerabilidades y problemas de seguridad identifi
 **Archivo:** `api-server/.env`
 
 ```
-ODBC_CONN=Driver={IBM i Access ODBC Driver};System=pub400.com;Uid=codecraft;Pwd=msantos02;...
+DB2_HOST=pub400.com
+DB2_USER=codecraft
+DB2_PASS=msantos02
 ```
 
-**Problema:** La cadena de conexión ODBC contiene usuario y contraseña en texto plano. Además, SSL está deshabilitado (`SSL=0`), lo que significa que las credenciales viajan en texto plano por la red.
+**Problema:** Las credenciales del IBM i (DB2_USER/DB2_PASS) están en texto plano en el `.env`.
 
 **Riesgo:** Cualquier persona con acceso al servidor o al repositorio puede obtener credenciales de la base de datos IBM i.
 
 **Mitigación:**
 
 - Usar variables de entorno con autenticación por certificado cuando sea posible
-- Habilitar SSL (`SSL=1`) en la conexión ODBC
+- Configurar correctamente el certificado TLS del Mapepire Server (`rejectUnauthorized: true`)
 - Rotar las credenciales inmediatamente
 - No incluir archivos `.env` en el repositorio (ya están en `.gitignore`)
 - Implementar un vault de secretos (HashiCorp Vault, AWS Secrets Manager, etc.)
@@ -710,7 +714,7 @@ await api.post("ClientFormt/validar", datos);
 
 #### V-16: Comentarios Confidenciales en Código
 
-**Problema:** Se encontraron comentarios como `pub400` y `msantos02` en la cadena de conexión ODBC, que exponen información del sistema.
+**Problema:** Se encontraron comentarios como `pub400` y `msantos02` en las credenciales de conexión, que exponen información del sistema.
 
 **Riesgo:** Bajo si el `.env` está en `.gitignore`, pero el daño ya está hecho si se ha commiteado en algún momento.
 
@@ -744,7 +748,7 @@ await api.post("ClientFormt/validar", datos);
 
 1. **Logging seguro**: No registrar información sensible como contraseñas o tokens. Pino actualmente loggea los datos enviados al SP (`logger.info({ datos }, 'Enviando datos al procedimiento')`).
 
-2. **Principio de mínimo privilegio**: La cuenta ODBC usada en la conexión debería tener solo los permisos necesarios para ejecutar `SP_VALIDTC` y leer `TABCLI03`.
+2. **Principio de mínimo privilegio**: La cuenta Mapepire usada en la conexión debería tener solo los permisos necesarios para ejecutar `SP_VALIDTC` y leer `TABCLI03`.
 
 3. **Validación de entrada**: Agregar sanitización en el frontend contra XSS (escape de caracteres HTML en los campos de texto).
 
@@ -764,7 +768,7 @@ await api.post("ClientFormt/validar", datos);
 
 9. **Monitoreo de seguridad**: Implementar registro y monitoreo de intentos de autenticación fallidos (actualmente no se trackean).
 
-10. **Cifrado de datos en tránsito**: Habilitar SSL en la conexión ODBC (`SSL=1`) y configurar HTTPS en el servidor.
+10. **Cifrado de datos en tránsito**: Configurar TLS en Mapepire Server (`rejectUnauthorized: true`) y HTTPS en el servidor Express.
 
 ### 12.3 Roadmap Sugerido
 
