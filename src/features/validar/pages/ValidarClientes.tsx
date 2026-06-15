@@ -1,8 +1,8 @@
+import Card from "@ui/Card";
+import FormField from "@ui/FormField";
 import { useState, type ChangeEvent } from "react";
 import { validarClient } from "../../dashboard/services";
 import type { ClientFormt } from "../../dashboard/types";
-import Card from "@ui/Card";
-import FormField from "@ui/FormField";
 
 const initialFormData: ClientFormt = {
   nomCli: "",
@@ -212,7 +212,9 @@ export default function ValidarClientes() {
             <span className="text-lg font-mono">
               {resultado.tipo === "exito" ? ">" : "!"}
             </span>
-            <span className="flex-1 text-sm font-medium">{resultado.mensaje}</span>
+            <span className="flex-1 text-sm font-medium">
+              {resultado.mensaje}
+            </span>
             <button
               onClick={() => setResultado(null)}
               className="opacity-50 hover:opacity-100 transition-opacity"
