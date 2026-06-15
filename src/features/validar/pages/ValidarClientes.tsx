@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent } from "react";
 import { validarClient } from "../../dashboard/services";
 import type { ClientFormt } from "../../dashboard/types";
+import Card from "@ui/Card";
+import FormField from "@ui/FormField";
 
 const initialFormData: ClientFormt = {
   nomCli: "",
@@ -24,10 +26,11 @@ export default function ValidarClientes() {
   const [formData, setFormData] = useState<ClientFormt>(initialFormData);
 
   const validarDigitos = (value: string, campo: "rucCli" | "telCli") => {
-    if (campo === "rucCli" && value.length != 11) {
-      return "El valor ingrsado invalido, total digtos esperado 11!";
-    } else if (campo === "telCli" && value.length != 10) {
-      return "El valor ingrsado invalido, total digtos esperado 10! ";
+    if (campo === "rucCli" && value.length !== 11) {
+      return "El valor ingresado es inválido, total dígitos esperado 11";
+    }
+    if (campo === "telCli" && value.length !== 10) {
+      return "El valor ingresado es inválido, total dígitos esperado 10";
     }
     return undefined;
   };
@@ -60,7 +63,7 @@ export default function ValidarClientes() {
       const codigo = await validarClient(formData);
 
       if (codigo === "00") {
-        setResultado({ tipo: "exito", mensaje: "Cliente validado con exito!" });
+        setResultado({ tipo: "exito", mensaje: "Cliente validado con éxito" });
         setFormData(initialFormData);
         setErrores({});
       } else {
@@ -83,137 +86,89 @@ export default function ValidarClientes() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Validar Clientes</h1>
-        <p className="text-gray-500 dark:text-slate-400">
+        <h1 className="text-2xl font-display font-bold text-text-primary tracking-tight">
+          Validar Clientes
+        </h1>
+        <p className="text-sm text-text-secondary mt-1">
           Complete los datos del cliente para validación
         </p>
       </div>
 
-      {/* Form Card */}
-      <div className="bg-white dark:bg-black rounded-lg shadow-sm border border-gray-100 dark:border-slate-800 p-6">
+      <Card>
         <form onSubmit={handleSubmit}>
-          {/* Grid responsive */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Nombre */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
-                Nombre
-              </label>
-              <input
-                name="nomCli"
-                value={formData.nomCli}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
-                placeholder="Ingrese nombre"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <FormField
+              label="Nombre"
+              name="nomCli"
+              value={formData.nomCli}
+              onChange={handleChange}
+              required
+              placeholder="Ingrese nombre"
+            />
 
-            {/* Primer Apellido */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
-                Primer Apellido
-              </label>
-              <input
-                name="patCli"
-                value={formData.patCli}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
-                placeholder="Ingrese apellido"
-              />
-            </div>
+            <FormField
+              label="Primer Apellido"
+              name="patCli"
+              value={formData.patCli}
+              onChange={handleChange}
+              required
+              placeholder="Ingrese apellido"
+            />
 
-            {/* Segundo Apellido */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
-                Segundo Apellido
-              </label>
-              <input
-                name="matCli"
-                value={formData.matCli}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
-                placeholder="Ingrese apellido"
-              />
-            </div>
+            <FormField
+              label="Segundo Apellido"
+              name="matCli"
+              value={formData.matCli}
+              onChange={handleChange}
+              required
+              placeholder="Ingrese apellido"
+            />
 
-            {/* Correo */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
-                Correo Electrónico
-              </label>
-              <input
-                name="corrCli"
-                type="email"
-                value={formData.corrCli}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500"
-                placeholder="correo@ejemplo.com"
-              />
-            </div>
+            <FormField
+              label="Correo Electrónico"
+              name="corrCli"
+              type="email"
+              value={formData.corrCli}
+              onChange={handleChange}
+              required
+              placeholder="correo@ejemplo.com"
+            />
 
-            {/* Cédula/RUC */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
-                Cédula / RUC
-              </label>
-              <input
-                name="rucCli"
-                value={formData.rucCli}
-                onChange={handleChange}
-                required
-                className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 ${
-                  errores.rucCli
-                    ? "border-red-500 bg-red-50 dark:bg-red-950 dark:border-red-400"
-                    : "border-gray-300 dark:border-slate-700"
-                }`}
-                placeholder="402-4567890-1"
-              />
-              {errores.rucCli && (
-                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errores.rucCli}</p>
-              )}
-            </div>
+            <FormField
+              label="Cédula / RUC"
+              name="rucCli"
+              value={formData.rucCli}
+              onChange={handleChange}
+              required
+              mono
+              placeholder="402-4567890-1"
+              error={errores.rucCli}
+            />
 
-            {/* Teléfono */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 dark:text-slate-300">
-                Teléfono
-              </label>
-              <input
-                name="telCli"
-                value={formData.telCli}
-                onChange={handleChange}
-                required
-                className={`w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white dark:bg-black text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 ${
-                  errores.telCli
-                    ? "border-red-500 bg-red-50 dark:bg-red-950 dark:border-red-400"
-                    : "border-gray-300 dark:border-slate-700"
-                }`}
-                placeholder="829-772-9654"
-              />
-              {errores.telCli && (
-                <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errores.telCli}</p>
-              )}
-            </div>
+            <FormField
+              label="Teléfono"
+              name="telCli"
+              value={formData.telCli}
+              onChange={handleChange}
+              required
+              mono
+              placeholder="829-772-9654"
+              error={errores.telCli}
+            />
           </div>
 
-          {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 mt-6">
             <button
               type="submit"
               data-white-btn
               disabled={loading}
-              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white dark:bg-white dark:text-gray-900 dark:border dark:border-gray-300 dark:hover:bg-gray-100 px-6 py-2.5 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+              className="flex-1 sm:flex-none bg-deepnavy hover:bg-deepnavy-hover text-white px-6 py-2.5 rounded-sm font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {loading && (
                 <svg
-                  className="animate-spin h-5 w-5 text-white"
+                  className="animate-spin h-4 w-4 text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -239,35 +194,36 @@ export default function ValidarClientes() {
               type="button"
               data-white-btn
               onClick={clearForm}
-              className="flex-1 sm:flex-none bg-gray-100 hover:bg-gray-200 text-gray-700 dark:bg-white dark:text-gray-900 dark:border dark:border-gray-300 dark:hover:bg-gray-100 px-6 py-2.5 rounded-lg font-medium transition"
+              className="flex-1 sm:flex-none bg-surface-hover hover:bg-border-light text-text-primary px-6 py-2.5 rounded-sm font-medium text-sm transition-colors border border-border-light"
             >
               Limpiar
             </button>
           </div>
         </form>
 
-        {/* Toast resultado */}
         {resultado && (
           <div
-            className={`mt-4 p-4 rounded-lg flex items-center gap-3 ${
+            className={`mt-5 p-4 rounded-sm animate-fade-in flex items-center gap-3 ${
               resultado.tipo === "exito"
-                ? "bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-300 border border-green-200 dark:border-green-800"
-                : "bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-800"
+                ? "bg-terminalgreen-bg text-terminalgreen-dark border border-terminalgreen/20"
+                : "bg-redprimary-bg text-redprimary border border-redprimary/20"
             }`}
           >
-            <span className="text-lg">
-              {resultado.tipo === "exito" ? "✓" : "✗"}
+            <span className="text-lg font-mono">
+              {resultado.tipo === "exito" ? ">" : "!"}
             </span>
-            <span className="flex-1 font-medium">{resultado.mensaje}</span>
+            <span className="flex-1 text-sm font-medium">{resultado.mensaje}</span>
             <button
               onClick={() => setResultado(null)}
-              className="text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"
+              className="opacity-50 hover:opacity-100 transition-opacity"
             >
-              ✕
+              <svg className="w-4 h-4" viewBox="0 0 12 12" fill="currentColor">
+                <path d="M2.22 2.22a.75.75 0 011.06 0L6 4.94l2.72-2.72a.75.75 0 111.06 1.06L7.06 6l2.72 2.72a.75.75 0 11-1.06 1.06L6 7.06l-2.72 2.72a.75.75 0 01-1.06-1.06L4.94 6 2.22 3.28a.75.75 0 010-1.06z" />
+              </svg>
             </button>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

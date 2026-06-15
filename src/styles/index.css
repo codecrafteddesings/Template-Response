@@ -1,20 +1,121 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-deepnavy: #1A3A5C;
+  --color-deepnavy-hover: #254E73;
+  --color-deepnavy-light: #E8EDF2;
+  --color-terminalgreen: #00DC82;
+  --color-terminalgreen-bg: #E8FAF1;
+  --color-terminalgreen-dark: #009B5C;
+  --color-redprimary: #DC3E3E;
+  --color-redprimary-bg: #FDE8E8;
+  --color-amberprimary: #D4951A;
+  --color-amberprimary-bg: #FEF3D9;
+  --color-bg: #F5F5F0;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F7F6F2;
+  --color-border-light: #E8E6E1;
+  --color-text-primary: #1A1A1E;
+  --color-text-secondary: #787878;
+  --font-display: 'DM Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  color-scheme: light dark;
-  background-color: #f8fafc;
-  color: #0f172a;
+  color-scheme: light;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
 }
 
 html.dark {
   color-scheme: dark;
-  background-color: #000000;
-  color: #f8fafc;
+  --color-bg: #0A0A0B;
+  --color-surface: #141416;
+  --color-surface-hover: #1C1C20;
+  --color-border-light: #2A2A30;
+  --color-text-primary: #F0EFEA;
+  --color-text-secondary: #8A8A8A;
+  --color-deepnavy-light: #1A2030;
+  --color-terminalgreen-bg: #0B2E1E;
+  --color-redprimary-bg: #2E0B0B;
+  --color-amberprimary-bg: #2E220B;
+  background-color: #0A0A0B;
+  color: #F0EFEA;
 }
 
 html.dark body {
-  background-color: #000000;
-  color: #f8fafc;
+  background-color: #0A0A0B;
+  color: #F0EFEA;
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-mono);
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+}
+
+.font-mono-input {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}
+
+@utility animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+@utility animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+@utility animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -33,3 +33,4 @@ coverage/
 
 # Build artifacts
 *.tsbuildinfo
+testsprite_tests\tmp\config.json
