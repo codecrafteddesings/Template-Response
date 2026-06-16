@@ -24,7 +24,7 @@ const navItems = [
   },
   {
     to: "/validar",
-    label: "Validar Clientes",
+    label: "Verificación",
     icon: (
       <svg
         className="w-5 h-5"
@@ -83,13 +83,51 @@ export default function Sidebar() {
           md:translate-x-0 md:static md:block
         `}
       >
-        <div className="p-5 border-b border-border-light">
-          <h1 className="text-lg font-display font-bold text-text-primary tracking-tight">
-            SP VALIDAR
-          </h1>
-          <p className="text-[11px] text-text-secondary font-mono font-medium uppercase tracking-widest mt-0.5">
-            IBM i System
-          </p>
+        <div className="px-5 py-[7px] border-b border-border-light flex items-center gap-3 h-14">
+          <svg
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-7 h-7 shrink-0"
+          >
+            <rect
+              x="0.75"
+              y="0.75"
+              width="26.5"
+              height="26.5"
+              rx="5.5"
+              stroke="currentColor"
+              strokeWidth="1.3"
+            />
+            <path
+              d="M8.5 10.2c0-1.7 1.3-3 2.8-3s2.8 1.3 2.8 2.7c0 1.8-1.1 2.3-2.8 3.2s-2.8 1.9-2.8 4c0 1.5 1.3 2.7 2.8 2.7s2.8-1.2 2.8-2.7"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M17.7 9.2v9.6"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+            <path
+              d="M17.7 9.2h2.2c1.5 0 2.7 1 2.7 2.4s-1.2 2.4-2.7 2.4h-2.2"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <div>
+            <h1 className="text-sm font-display font-bold text-text-primary tracking-tight leading-tight">
+              SP Validator
+            </h1>
+            <p className="text-[10px] text-text-secondary font-mono font-medium uppercase tracking-widest leading-tight">
+              IBM i System
+            </p>
+          </div>
         </div>
 
         <nav className="p-3 space-y-0.5">

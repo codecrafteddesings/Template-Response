@@ -5,17 +5,43 @@ import { useAuthStore } from "../store";
 
 function EyeIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+      />
     </svg>
   );
 }
 
 function EyeOffIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
+      />
     </svg>
   );
 }
@@ -89,10 +115,48 @@ export default function LoginPage() {
         className="relative bg-surface border border-border-light p-8 w-80 animate-scale-in"
       >
         <div className="mb-6 text-center">
-          <h1 className="text-xl font-display font-bold text-text-primary tracking-tight">
-            ValidaClientes
-          </h1>
-          <p className="text-[11px] text-text-secondary font-mono font-medium uppercase tracking-widest mt-1">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <svg
+              viewBox="0 0 32 32"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-8 h-8"
+            >
+              <rect
+                x="1"
+                y="1"
+                width="30"
+                height="30"
+                rx="6"
+                stroke="currentColor"
+                strokeWidth="1.3"
+              />
+              <path
+                d="M9.5 11.5c0-2 1.5-3.5 3.2-3.5s3.2 1.5 3.2 3.2c0 2.1-1.3 2.7-3.2 3.7s-3.2 2.2-3.2 4.6c0 1.7 1.5 3.1 3.2 3.1s3.2-1.4 3.2-3.1"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M20.2 10.5v11"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+              <path
+                d="M20.2 10.5h2.5c1.8 0 3.1 1.1 3.1 2.8s-1.3 2.8-3.1 2.8h-2.5"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <h1 className="text-xl font-display font-bold text-text-primary tracking-tight">
+              SP Validator
+            </h1>
+          </div>
+          <p className="text-[11px] text-text-secondary font-mono font-medium uppercase tracking-widest">
             IBM i System
           </p>
           <div className="mt-4 pt-4 border-t border-border-light">
@@ -104,9 +168,17 @@ export default function LoginPage() {
 
         {error && (
           <p className="bg-redprimary-bg text-redprimary p-2.5 mb-4 text-xs font-medium rounded-sm flex items-center gap-2">
-            <svg className="w-4 h-4 shrink-0" viewBox="0 0 12 12" fill="currentColor">
+            <svg
+              className="w-4 h-4 shrink-0"
+              viewBox="0 0 12 12"
+              fill="currentColor"
+            >
               <path d="M6 1.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0V2.25A.75.75 0 016 1.5zM6 8.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
-              <path fillRule="evenodd" d="M6 0a6 6 0 100 12A6 6 0 006 0zM1.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M6 0a6 6 0 100 12A6 6 0 006 0zM1.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z"
+                clipRule="evenodd"
+              />
             </svg>
             {error}
           </p>
@@ -183,14 +255,34 @@ export default function LoginPage() {
           className="w-full bg-deepnavy hover:bg-deepnavy-hover text-white font-medium text-sm px-4 py-2.5 rounded-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
         >
           {loading && (
-            <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            <svg
+              className="animate-spin h-4 w-4 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
             </svg>
           )}
           {loading
-            ? mode === "login" ? "Entrando..." : "Creando cuenta..."
-            : mode === "login" ? "Entrar" : "Crear cuenta"}
+            ? mode === "login"
+              ? "Entrando..."
+              : "Creando cuenta..."
+            : mode === "login"
+              ? "Entrar"
+              : "Crear cuenta"}
         </button>
 
         <p className="mt-4 text-center text-xs text-text-secondary">

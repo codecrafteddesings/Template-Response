@@ -3,6 +3,8 @@ import FormField from "@ui/FormField";
 import { useState, type ChangeEvent } from "react";
 import { validarClient } from "../../dashboard/services";
 import type { ClientFormt } from "../../dashboard/types";
+import { useAuditStore } from "@features/usuarios/store";
+import { useAuthStore } from "@features/auth/store";
 
 const initialFormData: ClientFormt = {
   nomCli: "",
@@ -14,7 +16,10 @@ const initialFormData: ClientFormt = {
   codVal: "VAL",
 };
 
-export default function ValidarClientes() {
+export default function VerificacionView() {
+  const addAuditEntry = useAuditStore((s) => s.addEntry);
+  const currentUser = useAuthStore((s) => s.user);
+
   const [loading, setLoading] = useState(false);
   const [resultado, setResultado] = useState<{
     tipo: "exito" | "error";
@@ -63,11 +68,30 @@ export default function ValidarClientes() {
       const codigo = await validarClient(formData);
 
       if (codigo === "00") {
-        setResultado({ tipo: "exito", mensaje: "Cliente validado con éxito" });
+        setResultado({
+          tipo: "exito",
+          mensaje: "Datos verificados correctamente",
+        });
+        addAuditEntry({
+          userId: currentUser?.id ?? "",
+          userName: currentUser?.name ?? "Desconocido",
+          clientName: `${formData.nomCli} ${formData.patCli}`,
+          clientRuc: formData.rucCli,
+          result: "exito",
+          codigo,
+        });
         setFormData(initialFormData);
         setErrores({});
       } else {
         setResultado({ tipo: "error", mensaje: `Error: Código ${codigo}` });
+        addAuditEntry({
+          userId: currentUser?.id ?? "",
+          userName: currentUser?.name ?? "Desconocido",
+          clientName: `${formData.nomCli} ${formData.patCli}`,
+          clientRuc: formData.rucCli,
+          result: "error",
+          codigo,
+        });
       }
     } catch {
       setResultado({
@@ -89,14 +113,14 @@ export default function ValidarClientes() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className="text-2xl font-display font-bold text-text-primary tracking-tight">
-          Validar Clientes
+          Validador de Tarjetas
         </h1>
         <p className="text-sm text-text-secondary mt-1">
-          Complete los datos del cliente para validación
+          Verifique tarjetas y datos de clientes en IBM i
         </p>
       </div>
 
-      <Card>
+      <Card className="mx-auto max-w-4xl">
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             <FormField
@@ -188,7 +212,7 @@ export default function ValidarClientes() {
                   />
                 </svg>
               )}
-              {loading ? "Validando..." : "Validar Cliente"}
+              {loading ? "Verificando..." : "Verificar Datos"}
             </button>
             <button
               type="button"

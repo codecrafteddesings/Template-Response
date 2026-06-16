@@ -1,7 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import AppLayout from "@components/layout/AppLayout";
 import Dashboard from "@features/dashboard/pages/Dashboard";
-import ValidarClientes from "@features/validar/pages/ValidarClientes";
+import VerificacionView from "@features/validar/pages/VerificacionView";
+import UsuariosPage from "@features/usuarios/pages/UsuariosPage";
 import ProtectedRoute from "@components/ProtectedRoute";
 import Login from "../features/auth/pages/Login";
 import { publicRoutes } from "./routes";
@@ -23,7 +24,7 @@ export const router = createBrowserRouter([
         path: "validar",
         element: (
           <ProtectedRoute>
-            <ValidarClientes />
+            <VerificacionView />
           </ProtectedRoute>
         ),
       },
@@ -31,12 +32,7 @@ export const router = createBrowserRouter([
         path: "usuarios",
         element: (
           <ProtectedRoute>
-            <div className="text-center py-12">
-              <h2 className="text-2xl font-bold text-gray-800">
-                Módulo de Usuarios
-              </h2>
-              <p className="text-gray-500 mt-2">Próximamente</p>
-            </div>
+            <UsuariosPage />
           </ProtectedRoute>
         ),
       },
