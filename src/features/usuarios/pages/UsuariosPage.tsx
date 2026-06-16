@@ -27,45 +27,57 @@ export default function UsuariosPage() {
   const [activeTab, setActiveTab] = useState<Tab>("perfil");
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
+    <div className="space-y-8 animate-fade-in mx-auto max-w-5xl">
+      <div className="pb-4 border-b border-border-light/50">
         <h1 className="text-2xl font-display font-bold text-text-primary tracking-tight">
           Usuarios
         </h1>
-        <p className="text-sm text-text-secondary mt-1">
+        <p className="text-sm text-text-secondary mt-2">
           Gestión de perfil, auditoría y usuarios del sistema
         </p>
       </div>
 
-      <div className="flex gap-1 border-b border-border-light">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all duration-150 border-b-2 -mb-px ${
-              activeTab === tab.id
-                ? "border-deepnavy text-deepnavy dark:text-blue-300 dark:border-blue-300"
-                : "border-transparent text-text-secondary hover:text-text-primary hover:border-border-light"
-            }`}
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
+      <div className="relative">
+        <div className="flex gap-1 border-b border-border-light bg-surface/50 p-1 rounded-t-sm">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-200 border-b-2 -mb-px relative ${
+                activeTab === tab.id
+                  ? "border-deepnavy text-deepnavy dark:text-blue-300 dark:border-blue-300 bg-white dark:bg-slate-800"
+                  : "border-transparent text-text-secondary hover:text-text-primary hover:border-border-light hover:bg-surface/50"
+              }`}
+              aria-selected={activeTab === tab.id}
+              role="tab"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d={tab.icon} />
-            </svg>
-            {tab.label}
-          </button>
-        ))}
-      </div>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d={tab.icon}
+                />
+              </svg>
+              {tab.label}
+              {activeTab === tab.id && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-deepnavy dark:bg-blue-300" />
+              )}
+            </button>
+          ))}
+        </div>
 
-      <div className="min-h-[300px]">
-        {activeTab === "perfil" && <ProfileTab />}
-        {activeTab === "auditoria" && <AuditLogTab />}
-        {activeTab === "usuarios" && <UserManagementTab />}
+        <div className="min-h-[400px] bg-white dark:bg-slate-800 border border-border-light border-t-0 rounded-b-sm p-6 shadow-sm">
+          {activeTab === "perfil" && <ProfileTab />}
+          {activeTab === "auditoria" && <AuditLogTab />}
+          {activeTab === "usuarios" && <UserManagementTab />}
+        </div>
       </div>
     </div>
   );

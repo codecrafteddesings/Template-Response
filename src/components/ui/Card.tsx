@@ -13,7 +13,7 @@ export default function Card({
 }: CardProps) {
   return (
     <div
-      className={`bg-surface border border-border-light rounded-sm ${padding ? "p-5" : ""} ${className}`}
+      className={`bg-surface border border-border-light rounded-sm ${padding ? "p-6" : ""} shadow-sm hover:shadow-md transition-shadow duration-200 ${className}`}
     >
       {children}
     </div>

@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "model": "ollama/qwen2.5",
   "mcp": {
     "TestSprite": {
       "type": "local",
@@ -7,6 +8,33 @@
       "enabled": true,
       "environment": {
         "API_KEY": "sk-user--nI46e4ZlYulspIA1W8H4KQKKk5EsuRinq59uEsoyS6-ktjJjjW9QuamK4j9lwMG-3OguAAT23KkSp9nGwyocewNKStuP1nnoPUYrfMT5gM9G8Ui4CpKexjo9y6i1P3pAnE"
+      }
+    }
+  },
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "llama3.2": {
+          "name": "Llama 3.2",
+          "tools": true
+        },
+        "qwen2.5": {
+          "name": "Qwen 2.5",
+          "tools": true
+        },
+        "llava": {
+          "name": "LLaVA (vision - sin tools)",
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"]
+          },
+          "tools": false
+        }
       }
     }
   }

@@ -72,54 +72,61 @@ export default function UserManagementTab() {
   }
 
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-text-secondary">
-        {users.length} usuario{users.length !== 1 ? "s" : ""} registrado
-        {users.length !== 1 ? "s" : ""}
-      </p>
-
-      {message && (
-        <p
-          className={`text-xs font-medium ${message.tipo === "exito" ? "text-terminalgreen-dark dark:text-terminalgreen" : "text-redprimary"}`}
-        >
-          {message.texto}
+    <div className="space-y-5">
+      <div className="flex items-center justify-between pb-3 border-b border-border-light">
+        <p className="text-sm text-text-secondary font-medium">
+          {users.length} usuario{users.length !== 1 ? "s" : ""} registrado
+          {users.length !== 1 ? "s" : ""}
         </p>
-      )}
+        {message && (
+          <p
+            className={`text-xs font-medium px-3 py-1.5 rounded-sm ${
+              message.tipo === "exito"
+                ? "text-terminalgreen-dark dark:text-terminalgreen bg-terminalgreen-bg/50 border border-terminalgreen/20"
+                : "text-redprimary bg-redprimary-bg/50 border border-redprimary/20"
+            }
+            `}
+          >
+            {message.texto}
+          </p>
+        )}
+      </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-sm border border-border-light">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border-light">
-              <th className="text-left py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+            <tr className="bg-surface border-b border-border-light">
+              <th className="text-left py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 ID
               </th>
-              <th className="text-left py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+              <th className="text-left py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 Nombre
               </th>
-              <th className="text-left py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+              <th className="text-left py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 Correo
               </th>
-              <th className="text-right py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+              <th className="text-right py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 Acción
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-border-light/50">
             {users.map((u) => (
               <tr
                 key={u.id}
-                className="border-b border-border-light/50 hover:bg-surface-hover/50 transition-colors"
+                className="hover:bg-surface-hover/50 transition-colors duration-150"
               >
-                <td className="py-3 px-3 text-text-secondary font-mono text-xs">
+                <td className="py-4 px-4 text-text-secondary font-mono text-xs">
                   #{u.id}
                 </td>
-                <td className="py-3 px-3">
+                <td className="py-4 px-4">
                   {editingId === u.id ? (
                     <input
                       type="text"
-                      className="w-full border border-border-light rounded-sm px-2.5 py-1.5 bg-surface text-text-primary text-sm outline-none focus:border-deepnavy focus:ring-1 focus:ring-deepnavy/20"
+                      className="w-full border border-border-light rounded-sm px-2.5 py-1.5 bg-surface text-text-primary text-sm outline-none focus:border-deepnavy focus:ring-1 focus:ring-deepnavy/20 hover:border-border-medium"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
+                      aria-label="Editar nombre de usuario"
                     />
                   ) : (
                     <span className="text-text-primary font-medium">
@@ -127,45 +134,50 @@ export default function UserManagementTab() {
                     </span>
                   )}
                 </td>
-                <td className="py-3 px-3">
+                <td className="py-4 px-4">
                   {editingId === u.id ? (
                     <input
                       type="email"
-                      className="w-full border border-border-light rounded-sm px-2.5 py-1.5 bg-surface text-text-primary text-sm outline-none focus:border-deepnavy focus:ring-1 focus:ring-deepnavy/20"
+                      className="w-full border border-border-light rounded-sm px-2.5 py-1.5 bg-surface text-text-primary text-sm outline-none focus:border-deepnavy focus:ring-1 focus:ring-deepnavy/20 hover:border-border-medium"
                       value={editEmail}
                       onChange={(e) => setEditEmail(e.target.value)}
+                      aria-label="Editar correo de usuario"
                     />
                   ) : (
                     <span className="text-text-secondary">{u.email}</span>
                   )}
                 </td>
-                <td className="py-3 px-3 text-right">
+                <td className="py-4 px-4 text-right">
                   {editingId === u.id ? (
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-3">
                       <button
                         onClick={() => handleSave(u.id)}
-                        className="text-terminalgreen-dark dark:text-terminalgreen hover:underline text-xs font-medium"
+                        className="text-terminalgreen-dark dark:text-terminalgreen hover:text-terminalgreen-dark hover:underline text-xs font-medium transition-colors px-2 py-1 rounded-sm hover:bg-terminalgreen-bg/50"
+                        aria-label="Guardar cambios"
                       >
                         Guardar
                       </button>
                       <button
                         onClick={cancelEdit}
-                        className="text-text-secondary hover:text-text-primary text-xs transition-colors"
+                        className="text-text-secondary hover:text-text-primary hover:underline text-xs transition-colors px-2 py-1 rounded-sm hover:bg-surface-hover"
+                        aria-label="Cancelar edición"
                       >
                         Cancelar
                       </button>
                     </div>
                   ) : (
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-3">
                       <button
                         onClick={() => startEdit(u)}
-                        className="text-deepnavy dark:text-blue-300 hover:underline text-xs font-medium"
+                        className="text-deepnavy dark:text-blue-300 hover:text-deepnavy dark:hover:text-blue-300 hover:underline text-xs font-medium transition-colors px-2 py-1 rounded-sm hover:bg-deepnavy/5"
+                        aria-label="Editar usuario"
                       >
                         Editar
                       </button>
                       <button
                         onClick={() => handleDelete(u.id)}
-                        className="text-redprimary hover:underline text-xs font-medium"
+                        className="text-redprimary hover:text-redprimary/80 hover:underline text-xs font-medium transition-colors px-2 py-1 rounded-sm hover:bg-redprimary/5"
+                        aria-label="Eliminar usuario"
                       >
                         Eliminar
                       </button>

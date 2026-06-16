@@ -33,57 +33,58 @@ export default function AuditLogTab() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-text-secondary">
+    <div className="space-y-5">
+      <div className="flex items-center justify-between pb-3 border-b border-border-light">
+        <p className="text-sm text-text-secondary font-medium">
           {entries.length} validación{entries.length !== 1 ? "es" : ""}{" "}
           registrada{entries.length !== 1 ? "s" : ""}
         </p>
         <button
           onClick={clearEntries}
-          className="text-xs text-text-secondary hover:text-redprimary transition-colors font-medium"
+          className="text-xs text-text-secondary hover:text-redprimary transition-all duration-200 font-medium px-3 py-1.5 rounded-sm hover:bg-redprimary/5"
+          aria-label="Limpiar historial de auditoría"
         >
           Limpiar historial
         </button>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-sm border border-border-light">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border-light">
-              <th className="text-left py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+            <tr className="bg-surface border-b border-border-light">
+              <th className="text-left py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 Usuario
               </th>
-              <th className="text-left py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+              <th className="text-left py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 Cliente
               </th>
-              <th className="text-left py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+              <th className="text-left py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 RUC
               </th>
-              <th className="text-left py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+              <th className="text-left py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 Resultado
               </th>
-              <th className="text-right py-3 px-3 text-[11px] font-medium text-text-secondary uppercase tracking-wider">
+              <th className="text-right py-4 px-4 text-[11px] font-semibold text-text-secondary uppercase tracking-wider">
                 Fecha
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-border-light/50">
             {entries.map((entry) => (
               <tr
                 key={entry.id}
-                className="border-b border-border-light/50 hover:bg-surface-hover/50 transition-colors"
+                className="hover:bg-surface-hover/50 transition-colors duration-150"
               >
-                <td className="py-3 px-3 text-text-primary font-medium">
+                <td className="py-4 px-4 text-text-primary font-medium">
                   {entry.userName}
                 </td>
-                <td className="py-3 px-3 text-text-primary">
+                <td className="py-4 px-4 text-text-primary">
                   {entry.clientName}
                 </td>
-                <td className="py-3 px-3 text-text-secondary font-mono text-xs">
+                <td className="py-4 px-4 text-text-secondary font-mono text-xs">
                   {entry.clientRuc}
                 </td>
-                <td className="py-3 px-3">
+                <td className="py-4 px-4">
                   <Badge
                     status={entry.result === "exito" ? "success" : "error"}
                     label={
@@ -93,7 +94,7 @@ export default function AuditLogTab() {
                     }
                   />
                 </td>
-                <td className="py-3 px-3 text-text-secondary text-xs text-right whitespace-nowrap">
+                <td className="py-4 px-4 text-text-secondary text-xs text-right whitespace-nowrap font-mono">
                   {new Date(entry.fecha).toLocaleString("es-ES", {
                     day: "2-digit",
                     month: "2-digit",

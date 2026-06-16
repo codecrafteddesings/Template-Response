@@ -1,10 +1,10 @@
-import Card from "@ui/Card";
-import FormField from "@ui/FormField";
 import { useState, type ChangeEvent } from "react";
+import Card from "../../../components/ui/Card";
+import FormField from "../../../components/ui/FormField";
+import { useAuthStore } from "../../auth/store";
 import { validarClient } from "../../dashboard/services";
 import type { ClientFormt } from "../../dashboard/types";
-import { useAuditStore } from "@features/usuarios/store";
-import { useAuthStore } from "@features/auth/store";
+import { useAuditStore } from "../../usuarios/store";
 
 const initialFormData: ClientFormt = {
   nomCli: "",
@@ -110,19 +110,17 @@ export default function VerificacionView() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-2xl font-display font-bold text-text-primary tracking-tight">
-          Validador de Tarjetas
-        </h1>
-        <p className="text-sm text-text-secondary mt-1">
+    <div className="p-6 space-y-6 animate-fade-in">
+      <div className="py-2">
+        <h1 className="text-2xl  font-display font-bold text-text-primary tracking-tight"></h1>
+        <p className="text-sm text-center text-text-secondary mt-1">
           Verifique tarjetas y datos de clientes en IBM i
         </p>
       </div>
 
-      <Card className="mx-auto max-w-4xl">
+      <Card className="mx-auto max max-w-xl ">
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 py-6 gap-6">
             <FormField
               label="Nombre"
               name="nomCli"
@@ -183,12 +181,12 @@ export default function VerificacionView() {
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 mt-6">
+          <div className="flex flex-col sm:flex-row gap-3 mt-8">
             <button
               type="submit"
-              data-white-btn
               disabled={loading}
-              className="flex-1 sm:flex-none bg-deepnavy hover:bg-deepnavy-hover text-white px-6 py-2.5 rounded-sm font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="w-full sm:w-auto bg-deepnavy hover:bg-deepnavy-hover text-white px-8 py-3 rounded-sm font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+              aria-label={loading ? "Verificando datos" : "Verificar datos"}
             >
               {loading && (
                 <svg
@@ -196,6 +194,7 @@ export default function VerificacionView() {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <circle
                     className="opacity-25"
@@ -212,28 +211,28 @@ export default function VerificacionView() {
                   />
                 </svg>
               )}
-              {loading ? "Verificando..." : "Verificar Datos"}
+              <span>{loading ? "Verificando..." : "Verificar Datos"}</span>
             </button>
             <button
               type="button"
-              data-white-btn
               onClick={clearForm}
-              className="flex-1 sm:flex-none bg-surface-hover hover:bg-border-light text-text-primary px-6 py-2.5 rounded-sm font-medium text-sm transition-colors border border-border-light"
+              className="w-full sm:w-auto bg-surface hover:bg-surface-hover text-text-primary px-8 py-3 rounded-sm font-medium text-sm transition-all duration-200 border border-border-light hover:border-border-medium flex items-center justify-center gap-2"
+              aria-label="Limpiar formulario"
             >
-              Limpiar
+              <span>Limpiar</span>
             </button>
           </div>
         </form>
 
         {resultado && (
           <div
-            className={`mt-5 p-4 rounded-sm animate-fade-in flex items-center gap-3 ${
+            className={`mt-6 p-4 rounded-sm animate-fade-in flex items-center gap-3 shadow-sm ${
               resultado.tipo === "exito"
                 ? "bg-terminalgreen-bg text-terminalgreen-dark border border-terminalgreen/20"
                 : "bg-redprimary-bg text-redprimary border border-redprimary/20"
             }`}
           >
-            <span className="text-lg font-mono">
+            <span className="text-lg font-mono" aria-hidden="true">
               {resultado.tipo === "exito" ? ">" : "!"}
             </span>
             <span className="flex-1 text-sm font-medium">
@@ -241,9 +240,15 @@ export default function VerificacionView() {
             </span>
             <button
               onClick={() => setResultado(null)}
-              className="opacity-50 hover:opacity-100 transition-opacity"
+              className="opacity-50 hover:opacity-100 transition-opacity p-1 hover:bg-black/5 rounded-sm"
+              aria-label="Cerrar mensaje"
             >
-              <svg className="w-4 h-4" viewBox="0 0 12 12" fill="currentColor">
+              <svg
+                className="w-4 h-4"
+                viewBox="0 0 12 12"
+                fill="currentColor"
+                aria-hidden="true"
+              >
                 <path d="M2.22 2.22a.75.75 0 011.06 0L6 4.94l2.72-2.72a.75.75 0 111.06 1.06L7.06 6l2.72 2.72a.75.75 0 11-1.06 1.06L6 7.06l-2.72 2.72a.75.75 0 01-1.06-1.06L4.94 6 2.22 3.28a.75.75 0 010-1.06z" />
               </svg>
             </button>
