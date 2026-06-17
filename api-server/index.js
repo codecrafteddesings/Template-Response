@@ -17,6 +17,15 @@ const logger = pino({
       : undefined,
 })
 
+// Global error handlers to prevent crashes
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error({ err: reason, promise }, 'Unhandled Rejection')
+})
+
+process.on('uncaughtException', (err) => {
+  logger.error({ err }, 'Uncaught Exception')
+})
+
 // ─── Env Validation ───────────────────────────────────────────────
 const envSchema = z.object({
   PORT: z.coerce.number().default(3001),
@@ -71,27 +80,41 @@ async function ejecutarSP(datos) {
   try {
     logger.info({ datos }, 'Enviando datos al procedimiento')
 
-    const result = await pool.execute(
-      `CALL "CODECRAFT1"."SP_VALIDTC"(?, ?, ?, ?, ?, ?, ?, ?)`,
-      {
-        parameters: [
-          datos.nomCli,
-          datos.patCli,
-          datos.matCli,
-          datos.corrCli,
-          datos.rucCli,
-          datos.telCli,
-          datos.codVal,
-          '',
-        ],
-      }
-    )
+    const result = await Promise.race([
+      pool.execute(
+        `CALL "CODECRAFT1"."SP_VALIDTC"(?, ?, ?, ?, ?, ?, ?, ?)`,
+        {
+          parameters: [
+            datos.nomCli,
+            datos.patCli,
+            datos.matCli,
+            datos.corrCli,
+            datos.rucCli,
+            datos.telCli,
+            datos.codVal,
+            '',
+          ],
+        }
+      ),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('SP execution timeout after 30s')), 30000)
+      ),
+    ])
 
+    logger.info({ result: JSON.stringify(result).slice(0, 500) }, 'SP result received')
     logger.info('SP ejecutado correctamente')
-    return result
+    
+    // Extract output parameter (8th parameter = p_COD_RESP)
+    const outputParams = result.outputParameters || result.outParams || result.parameters || []
+    logger.info({ outputParams }, 'Output parameters from SP')
+    const codigoRespuesta = outputParams[7] ?? '00'
+    
+    logger.info({ codigoRespuesta }, 'Código de respuesta extraído del SP')
+    return { codigoRespuesta }
   } catch (error) {
-    logger.error({ err: error }, 'ERROR CRÍTICO EN EJECUCIÓN DEL SP')
-    throw error
+    logger.error({ err: error, message: error.message, stack: error.stack }, 'ERROR CRÍTICO EN EJECUCIÓN DEL SP')
+    // Return error code instead of throwing to prevent server crash
+    return { codigoRespuesta: '99', error: error.message }
   }
 }
 
@@ -137,6 +160,18 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
+// Test endpoint without SP call
+app.post('/api/test', (req, res) => {
+  logger.info({ body: req.body }, 'Test endpoint hit')
+  res.json({ received: req.body, codigoRespuesta: '00' })
+})
+
+// Simple GET test
+app.get('/api/test-get', (_req, res) => {
+  logger.info('Test GET endpoint hit')
+  res.json({ ok: true, codigoRespuesta: '00' })
+})
+
 // Valida cliente vía SP en IBM i
 app.post('/api/clientes/validar', async (req, res) => {
   try {
@@ -151,9 +186,7 @@ app.post('/api/clientes/validar', async (req, res) => {
     }
 
     logger.info('Enviando datos al SP del IBM i')
-    const result = await ejecutarSP(parsed.data)
-
-    const codigoRespuesta = '00'
+    const { codigoRespuesta } = await ejecutarSP(parsed.data)
 
     logger.info(
       { codigoRespuesta },
